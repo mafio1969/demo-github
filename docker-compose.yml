@@ -1,0 +1,106 @@
+version: '3'
+services:
+  api:
+    container_name: mfdemo
+    build:
+      context: ./
+    ports:
+      - "${WEB_PORT}:8080"
+      - "9002:9000"
+    image: mafio69/api-symfony
+    depends_on:
+      - database
+      - redis
+    environment:
+      - SERVERNAME=api.ccfound.test
+      - SERVERALIAS=www.api.ccfound.test
+      - DRUSH_VERSION=8/9
+      - APACHE_SERVER_NAME=api.ccfound.test
+      - APP_NAME=${APP_NAME}
+      - DB_HOST=${DB_HOST}
+      - PHP_SENDMAIL_DOMAIN=localhost
+      - APP_ENV=local
+      - DATABASE_NAME=${DATABASE_NAME}
+      - DATABASE_USER=${DATABASE_USER}
+      - DATABASE_PASSWORD=${DATABASE_PASSWORD}
+      - DEBUG=${DEBUG}
+      - SOCKET=~
+      - EMAIL_USER=${EMAIL_USER}
+      - EMAIL_PASSWORD=${EMAIL_PASSWORD}
+      - EMAIL_HOST=${EMAIL_HOST}
+      - XDEBUG_ENABLED=1
+      - XDEBUG_REMOTE_AUTOSTART=1
+      - XDEBUG_REMOTE_PORT=9003
+    volumes:
+      - ./main:/main
+      - ./logs/symfony-logs:/main/var/log
+      - ./logs/:/var/log/cron
+    links:
+      - database:mysql
+    healthcheck:
+      test: [ "CMD", "curl", "-f", "http://localhost${WEB_PORT}" ]
+      interval: 1m30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+
+  redis:
+    image: bitnami/redis:5.0.12-debian-10-r91
+    container_name: redis-mfdemo
+    ports:
+      - 7001:6379
+    environment:
+      - ALLOW_EMPTY_PASSWORD=yes
+
+  database:
+    container_name: db-mfdemo
+    # actency/docker-mysql available tags: latest, 5.7, 5.6, 5.5
+    image: bitnami/mariadb
+    ports:
+      - "${DATABASE_PORT}:3306"
+    environment:
+      - ALLOW_EMPTY_PASSWORD=yes
+      - MARIADB_DATABASE=${DATABASE_NAME}
+      - MARIADB_USER=${DATABASE_USER}
+      - MARIADB_PASSWORD=${DATABASE_PASSWORD}
+      - MARIADB_ROOT_PASSWORD=${DATABASE_ROOT_PASSWORD}
+    healthcheck:
+      test: [ "CMD", "curl", "-f", "http://localhost" ]
+      interval: 1m30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+
+  #  cloudsql:
+  #    container_name: sqlCloud-03
+  #    image: gcr.io/cloudsql-docker/gce-proxy:1.11
+  #    command: /cloud_sql_proxy -instances=ccfound-vpc-host-dev:europe-west3:dev-sql-mf=tcp:0.0.0.0:3306 -credential_file=/secrets/cloudsql/ccfound-vpc-host-dev-b95265f14f98.json
+  #    volumes:
+  #      - ./credential:/secrets/cloudsql
+  #      - mysql-data-proxy:/var/lib/mysql
+  #    ports:
+  #      - 4446:3306
+  #    expose:
+  #      - "5000"
+
+  mailtrap:
+    container_name: mailtrap-mfdemo
+    image: mailhog/mailhog
+    logging:
+      driver: 'none'  # disable saving logs
+    ports:
+      - 1025:1025 # smtp server
+      - 8025:8025 # web ui
+    healthcheck:
+      test: [ "CMD", "curl", "-f", "http://localhost:8025" ]
+      interval: 1m30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+
+networks:
+  default:
+    external:
+      name: mf-net
+volumes:
+  mysql-data-proxy:

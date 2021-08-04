@@ -1,0 +1,78 @@
+steps:
+  - name: 'gcr.io/cloud-builders/docker'
+    env:
+      - 'BUILD=$BUILD_ID'
+      - 'PROJECT_ID=$PROJECT_ID'
+      - 'PROJECT_NUMBER=$PROJECT_NUMBER'
+      - 'REV=$REVISION_ID'
+      - 'APP_ENV=dev'
+      - 'DB_HOST=35.198.160.86'
+      - 'SOCKET=/cloudsql/ccfound-vpc-host-dev:europe-west3:dev-sql-mf'
+      - 'DB_URL=mysql://root:4567@35.198.160.86/ccfound'
+      - 'MAILER_DSN=smtp://6340f21044aba9:a613d114d259d6@smtp.mailtrap.io:2525?encryption=tls&auth_mode=login'
+      - 'MESSENGER_TRANSPORT_DSN=doctrine://default'
+    args: ['build', '-t', 'eu.gcr.io/$PROJECT_ID/ccfound-backend:$COMMIT_SHA', '.']
+  # Push the container image to Container Registry
+  - name: 'gcr.io/cloud-builders/docker'
+    args: ['push', 'eu.gcr.io/$PROJECT_ID/ccfound-backend:$COMMIT_SHA']
+    env:
+      - 'BUILD=$BUILD_ID'
+      - 'PROJECT_ID=$PROJECT_ID'
+      - 'PROJECT_NUMBER=$PROJECT_NUMBER'
+      - 'REV=$REVISION_ID'
+      - 'APP_ENV=dev'
+      - 'DB_HOST=35.198.160.86'
+      - 'SOCKET=/cloudsql/ccfound-vpc-host-dev:europe-west3:dev-sql-mf'
+      - 'DB_URL=mysql://root:4567@35.198.160.86/ccfound'
+      - 'MAILER_DSN=smtp://6340f21044aba9:a613d114d259d6@smtp.mailtrap.io:2525?encryption=tls&auth_mode=login'
+      - 'MESSENGER_TRANSPORT_DSN=doctrine://default'
+  # Deploy container image to Cloud Run
+  - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
+    entrypoint: gcloud
+    args:
+      - 'run'
+      - 'deploy'
+      - 'ccfound-backend'
+      - '--image'
+      - 'eu.gcr.io/$PROJECT_ID/ccfound-backend:$COMMIT_SHA'
+      - '--region'
+      - 'europe-west3'
+      - '--platform'
+      - 'managed'
+    env:
+      - 'BUILD=$BUILD_ID'
+      - 'PROJECT_ID=$PROJECT_ID'
+      - 'PROJECT_NUMBER=$PROJECT_NUMBER'
+      - 'REV=$REVISION_ID'
+      - 'APP_ENV=dev'
+      - 'DB_HOST=35.198.160.86'
+      - 'SOCKET=/cloudsql/ccfound-vpc-host-dev:europe-west3:dev-sql-mf'
+      - 'DB_URL=mysql://root:4567@35.198.160.86/ccfound'
+      - 'MAILER_DSN=smtp://6340f21044aba9:a613d114d259d6@smtp.mailtrap.io:2525?encryption=tls&auth_mode=login'
+      - 'MESSENGER_TRANSPORT_DSN=doctrine://default'
+#  - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
+#    entrypoint: 'bash'
+#    args:
+#      - '-eEuo'
+#      - 'pipefail'
+#      - '-c'
+#      - |-
+#        /workspace/main/bin/console --no-interaction doctrine:migrations:migrate
+#    env:
+#      - 'APP_ENV=dev'
+
+images:
+  - 'eu.gcr.io/$PROJECT_ID/ccfound-backend:$COMMIT_SHA'
+options:
+  substitutionOption: ALLOW_LOOSE
+substitutions:
+  _DEPLOY_REGION: europe-central2
+  _GCR_HOSTNAME: eu.gcr.io
+  _PLATFORM: managed
+  _SERVICE_NAME: ccfound-backend
+tags:
+  - gcp-cloud-build-deploy-cloud-run
+  - gcp-cloud-build-deploy-cloud-run-managed
+  - ccfound-backend
+  - ccfound
+  - symfony

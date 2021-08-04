@@ -1,0 +1,47 @@
+### Symfony template
+# Cache and logs (Symfony2)
+/main/cache/*
+/main/logs/*
+!main/cache/.gitkeep
+!main/logs/.gitkeep
+
+# Email spool folder
+/main/spool/*
+
+
+# Logs (Symfony4)
+/var/log/*
+!var/log/.gitkeep
+
+# Parameters
+/main/config/parameters.yml
+/main/config/parameters.ini
+
+# Managed by Composer
+/main/bootstrap.php.cache
+/var/bootstrap.php.cache
+/bin/*
+!bin/console
+!bin/symfony_requirements
+/vendor/
+
+# Assets and user uploads
+/web/bundles/
+/web/uploads/
+
+# PHPUnit
+/main/phpunit.xml
+/phpunit.xml
+
+# Build data
+/build/
+
+# Composer PHAR
+/composer.phar
+
+# Backup entities generated with doctrine:generate:entities command
+#**/Entity/*~
+
+# Embedded web-server pid file
+/.web-server-pid
+
