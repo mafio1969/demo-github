@@ -50,14 +50,19 @@ WORKDIR /main
 #    && yarn install \
 #    && yarn cache clean \
 #    && ln -sf /main/var/log/local.log stdout\
-#    && ln -sf /var/log/nginx/project_access.log stdout \
-#    && ln -sf /dev/stdout /var/log/nginx/access.log \
-#	&& ln -sf /dev/stderr /var/log/nginx/error.log \
+
 RUN	mkdir -p /usr/share/nginx/logs/ \
 	&& mkdir -p /var/log/nginx/ \
-	&& mkdir -p /var/lib/nginx/body \
+	&& mkdir -p /var/lib/nginx/body/ \
+	&& mkdir -p /usr/share/nginx/logs/ \
 	&& chmod 777 -R /var/lib/nginx \
 	&& chmod 777 -R /var/log/ \
+	&& chmod 777 -R /usr/share/nginx/logs/ \
+    && ln -sf /var/log/nginx/project_access.log stdout \
+    && ln -sf /dev/stdout /var/log/nginx/access.log \
+    && ln -sf /dev/stdout /usr/share/nginx/logs/error.log \
+    && ln -sf /dev/stdout /usr/share/nginx/logs/access.log \
+    && ln -sf /dev/stderr /var/log/nginx/error.log \
     && ln -sf /var/log/nginx/project_access.log stdout \
     && ln -sf /dev/stdout /var/log/nginx/access.log \
     && ln -sf /dev/stderr /var/log/nginx/error.log
@@ -65,5 +70,7 @@ RUN	mkdir -p /usr/share/nginx/logs/ \
 STOPSIGNAL SIGQUIT
 EXPOSE 8080 9000
 WORKDIR /
+
 CMD ["supervisord", "-n"]
+
 

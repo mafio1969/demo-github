@@ -22,11 +22,11 @@ if [[ "$(docker images -q $IMAGE 2> /dev/null)" != "" ]] ; then
 fi
 
 docker image build -t $IMAGE . \
-       && docker run -p 8090:8080/tcp -d --name $NAME_CONTAINER  $IMAGE \
-       && CTR_ID=$(docker ps -q -f name=$NAME_CONTAINER) \
-       && docker cp -a "$CTR_ID":main/vendor/ `pwd`/main/ \
-       && docker cp -a "$CTR_ID":main/config/ `pwd`/main/ \
-       && docker stop "$CTR_ID"
-chmod 777 ./main/vendor
+       && docker run -p 8090:8080/tcp -d --name $NAME_CONTAINER  $IMAGE
+#       && CTR_ID=$(docker ps -q -f name=$NAME_CONTAINER)
+#       && docker cp -a "$CTR_ID":main/vendor/ `pwd`/main/ \
+#       && docker cp -a "$CTR_ID":main/config/ `pwd`/main/ \
+#       && docker stop "$CTR_ID"
+chmod 777 -R ./main
 echo The application will work on this address:  http://127.0.0.1:"$PORT"
 bash -c 'sleep 5 && docker-compose up'
