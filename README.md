@@ -17,9 +17,12 @@ NGINX:  nginx/1.14.2_
        **`exit 0` or `exit status 0` In linux it means `[OK]` any other number is an error**
 ##  RUN APPLICATION USING scripts-sh  
 ### ROAD MAP:  
-1.run in terminal `first-run-make-env.sh`   
+1.run in terminal `first-run-make-env.sh`
+before install symfony
 2.Run `docker ps` get container id
 3.Run `docker exec -it <container_id> bash` ('mfdemo')
+4 Run `rm -rf /main/`
+
 4.RUN in container `symfony new my_project_name --full` or
                    `symfony new my_project_name` or
                    `composer create-project symfony/website-skeleton my_project_name` or
