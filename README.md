@@ -1,7 +1,7 @@
-**Tested on ubuntu 20.04 INFO Distributor ID: Debian  
+_Tested on ubuntu 20.04 INFO Distributor ID: Debian    
 Description: Debian GNU/Linux 10 (buster)  
-PHP: PHP 8.0.8 (cli)   
-NGINX:  nginx/1.14.2 **    
+PHP: PHP 8.0.8 (cli)     
+NGINX:  nginx/1.14.2_    
   
 **For the application to work, it is necessary to run dockerfile or docker-compose**    
 **To run on the system, docker and docker-compose must be installed**    
