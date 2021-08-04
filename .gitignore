@@ -67,3 +67,4 @@ Thumbs.db
 /main/symfony.lock
 /main/var/log/
 /scripts-sh/temp/
+/logs/nginx.pid
