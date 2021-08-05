@@ -18,15 +18,12 @@ NGINX:  nginx/1.14.2_
 ##  RUN APPLICATION USING scripts-sh  
 ### ROAD MAP:  
 1.run in terminal `first-run-make-env.sh`
-before install symfony
-2.Run `docker ps` get container id
-3.Run `docker exec -it <container_id> bash` ('mfdemo')
-4 Run `rm -rf /main/`
-
-4.RUN in container `symfony new my_project_name --full` or
-                   `symfony new my_project_name` or
-                   `composer create-project symfony/website-skeleton my_project_name` or
-                   `composer create-project symfony/skeleton my_project_name` 
+install symfony
+`symfony new main --full --dir=./main`
+`composer create-project symfony/website-skeleton $PWD/main` or
+`composer create-project symfony/skeleton $PWD/main` 
+install laravel
+`composer create-project laravel/laravel $PWD/main`
 
 ## Commands:
 - `docker network create mf-net` (zero command)

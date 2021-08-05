@@ -10,7 +10,7 @@ TEST="$(grep mf-net ./config/testnetwork.txt)"
 [[ ! -z "$TEST" ]] && echo '[y/N] default n (no) (decker env)'
 cp  -i .env_example .env
 [[ ! -z "$TEST" ]] && echo '[y/N] default n (no) (symfony env)'
-# cp  -i ./main/.env.-local ./main/.env.local
+# cp  -i ./laravel/.env.-local ./laravel/.env.local
 WEB_PORT="$(grep WEB_PORT .env)"
 PORT=${WEB_PORT##*=}
 
@@ -24,8 +24,8 @@ fi
 docker image build -t $IMAGE . \
        && docker run -p 8090:8080/tcp -d --name $NAME_CONTAINER  $IMAGE
 #       && CTR_ID=$(docker ps -q -f name=$NAME_CONTAINER)
-#       && docker cp -a "$CTR_ID":main/vendor/ `pwd`/main/ \
-#       && docker cp -a "$CTR_ID":main/config/ `pwd`/main/ \
+#       && docker cp -a "$CTR_ID":laravel/vendor/ `pwd`/laravel/ \
+#       && docker cp -a "$CTR_ID":laravel/config/ `pwd`/laravel/ \
 #       && docker stop "$CTR_ID"
 chmod 777 -R ./main
 echo The application will work on this address:  http://127.0.0.1:"$PORT"

@@ -40,16 +40,16 @@ COPY config/supervisord.conf /etc/supervisor/conf.d/supervisord.conf
 COPY config/supervisord-main.conf /etc/supervisord.conf
 COPY config/nginx/nginx.conf /etc/nginx/nginx.conf
 COPY config/nginx/enabled-symfony.conf /etc/nginx/conf.d/enabled-symfony.conf
-COPY --chown=docker:docker /main /main
+COPY --chown=docker:docker /laravel /main
 WORKDIR /main
-#RUN bash -c  /main/entrypoint.sh \
+#RUN bash -c  /laravel/entrypoint.sh \
 #    && composer require \
 #    && composer dump-autoload \
 #    && mkdir -p /var/log/cron/ \
 #    && npm install \
 #    && yarn install \
 #    && yarn cache clean \
-#    && ln -sf /main/var/log/local.log stdout\
+#    && ln -sf /laravel/var/log/local.log stdout\
 
 RUN	mkdir -p /usr/share/nginx/logs/ \
 	&& mkdir -p /var/log/nginx/ \

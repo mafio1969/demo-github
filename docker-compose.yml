@@ -32,8 +32,8 @@ services:
       - XDEBUG_REMOTE_AUTOSTART=1
       - XDEBUG_REMOTE_PORT=9003
     volumes:
-      - ./main:/main
-      - ./logs/symfony-logs:/main/var/log
+      - ./laravel:/laravel
+#      - ./logs/symfony-logs:/laravel/var/log
       - ./logs/:/var/log/cron
       - ./logs/:/usr/share/nginx/logs
     links:
