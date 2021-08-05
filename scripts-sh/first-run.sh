@@ -4,6 +4,7 @@ IMAGE=mafio69/api-ccfound
 NAME_CONTAINER=api-ccfound
 cd  ..
 sudo chmod 777 -R ./main
+cp  .env_example .env
 docker network ls  | grep  'mf-net' > ./config/testnetwork.txt
 TEST="$(grep mf-net ./config/testnetwork.txt)"
 [[ -z "$TEST" ]] && docker network create mf-net
